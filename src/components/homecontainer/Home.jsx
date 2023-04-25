@@ -14,6 +14,7 @@ const Home = () => {
       <div className="flex justify-center">
         <button onClick={handleLogout}>Logout</button>
       </div>
+      
     </div>
   )
 }

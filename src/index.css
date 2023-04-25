@@ -33,4 +33,25 @@
       color: #fd6d6a;
       /* color:black; */
   }
+  .mybg{
+    background-color: #fd6d6a;
+  }
+  .video-frame {
+    position: relative;
+    width: 100%;
+    height: 67vh;
+    /* padding-bottom:; */
+    /* 16:9 aspect ratio */
+  }
+  
+  .video-frame video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  
 }

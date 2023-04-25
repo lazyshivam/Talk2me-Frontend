@@ -11,7 +11,7 @@ import User from "./homecontainer/User";
 
 const Container = () => {
   return (
-    <div className='flex  bg-white p-3 mx-20 my-5 rounded-3xl'  style={{width:"100vw"}}>
+    <div className='flex  bg-white p-3 mx-20 my-2 rounded-3xl'  style={{width:"100vw"}}>
       <SideBar/>
       <div style={{width:"56vw"}} className='border-l-2 p-2  rounded-l-2xl'>
         <div className="flex justify-start items-center  p-3 shadow-md " >
