@@ -13,12 +13,12 @@ const Participants = () => {
                 {
                     alluser.map((user,i)=>{
                         return(
-                            <div className="flex flex-row my-4 shadow-inner shadow-slate-300  mycolor rounded-full p-2 mr-4  " key={i}>
+                            <div className="flex flex-row my-4 shadow-inner shadow-slate-300  bg-blue-100 rounded-full p-2 mr-4  " key={i}>
                              <span className='w-14 mr-5  rounded-full  '>
                                 <img className='rounded-full ' src="https://source.unsplash.com/random/200x200?sig=1" alt="user-profile-pic" />
                              </span>
                              <p className='overflow-wrap'>{user.name} <br/>
-                             <span className='text-emerald-900 font-serif text-sm'>{user.email}</span>
+                             <span className='text-red-900 font-serif text-sm'>{user.email}</span>
                              </p>
                             </div>
                         );

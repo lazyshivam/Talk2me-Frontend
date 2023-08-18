@@ -2,39 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 @layer utilities {
-    
-    /* Chrome, Safari and open */
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
+  /* Chrome, Safari and open */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 
-    .no-scrollbar {
-      -ms-overflow-style: none; /* IE and Edge */
-      scrollbar-width: none; /* Firefox */
-    }
-    .myhover:hover{
-        background-color: #d1e8e8;
-        color: #01a289;
-    }
-    .btnhover:hover{
-      background-color: #d1f1f1;
-      color: #039781;
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
-    .mycolor{
-        background-color: #d1e8e8;
-        color: #01a289;
-        /* color:black; */
-    }
-   .overflow-wrap {
-      overflow-wrap: anywhere;
-    }
-    .mycolor1{
-      background-color:#fcf3f3;
-      color: #fd6d6a;
-      /* color:black; */
+  .myhover:hover {
+    background-color: #d1e8e8;
+    color: #01a289;
   }
-  .mybg{
-    background-color: #fd6d6a;
+  .btnhover:hover {
+    background-color: #d1f1f1;
+    color: #039781;
+  }
+  .mycolor {
+    background-color: #d1e8e8;
+    color: #01a289;
+    /* color:black; */
+  }
+  .active-link {
+    @apply text-red-300;
+     
+  }
+  .overflow-wrap {
+    overflow-wrap: anywhere;
+  }
+  .mycolor1 {
+    background-color: #fcf3f3;
+    color: #fd6d6a;
+    /* color:black; */
+  }
+  .mybg {
+    background-color: #01a289;
   }
   .video-frame {
     position: relative;
@@ -43,15 +46,20 @@
     /* padding-bottom:; */
     /* 16:9 aspect ratio */
   }
-  
-  .video-frame video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+
+  @keyframes gradientAnimation {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 100% 50%;
+    }
   }
-  
-  
+
+  .bg-gradient-animation {
+    animation: gradientAnimation 100s linear infinite;
+    background: linear-gradient(45deg, #83e8f4, #1de4ac, #f6e693, #ffc700);
+    background-size: 300% 300%;
+  }
+ 
 }

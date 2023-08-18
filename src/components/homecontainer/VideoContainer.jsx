@@ -1,16 +1,19 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect, useRef } from 'react'
 import videoContext from '../../videoContext/VideoContext'
 import image from '../../image/4.jpg';
+// import userContext from '../../userContext/UserContext';
 
 const VideoContainer = () => {
 
+  // const { user } = useContext(userContext);
   const { cameraOn,
     micOn,
     handleCameraToggle,
     handleMicToggle,
-    myVideo,
-    peerVideo,
     stream,
+    peerStream,
+    peerVideo,
+    myVideo,
     name,
     setName,
     me,
@@ -19,22 +22,10 @@ const VideoContainer = () => {
     call,
     leaveCall,
     answerCall,
-    callUser } = useContext(videoContext);
+    callUser, isCallStarted, isFullScreen } = useContext(videoContext);
 
-
-  const [bgColor, setBgColor] = useState('#31a364');
-  const [idTocall, setIdTocall] = useState('')
-  const handleCall = () => {
-    if (!callEnded) {
-      setBgColor('#fc5d5b');
-      callUser(me);
-    }
-    else {
-      setBgColor('#31a364');
-      leaveCall();
-    }
-
-  };
+  // const myVideo = useRef(null);
+  // const peerVideo = useRef(null);
 
   const handleFullscreen = () => {
     const videoElement = document.querySelector("video");
@@ -63,9 +54,11 @@ const VideoContainer = () => {
       audio.volume = volume;
     }
   };
+  //  window.location.reload();
+
 
   const [copied, setCopied] = useState(false);
-  const [userId,setUserId]=useState('');
+  const [userId, setUserId] = useState('');
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(me);
@@ -76,11 +69,18 @@ const VideoContainer = () => {
   };
 
 
+  useEffect(() => {
+    if (stream) {
+      myVideo.current.srcObject = stream;
+    }
+    if (peerStream)
+      peerVideo.current.srcObject = peerStream;
 
+  }, [callAccepted, callEnded]);
 
   return (
-    <div className='flex   flex-col'>
-      <div className="flex justify-between text-sm p-2 items-center ">
+    <div className='flex h-full  flex-col'>
+      <div className="flex justify-between text-sm p-2 items-center flex-wrap ">
         <div className="flex flex-nowrap px-3 ">
           <div className="flex mx-5 ">
             <p>
@@ -106,36 +106,80 @@ const VideoContainer = () => {
         </div>
 
       </div>
-      <div className='relative video-frame'>
-        {stream && (<video className='rounded-xl border border-red-400'
-          ref={myVideo}
-          muted
-          autoPlay
-          poster={image}
-        />)}
+      <div className='video-frame flex justify-center  overflow-hidden border  rounded-lg'>
+        <div className={`
+          inset-0
+          absolute
 
-        <div className="flex relative">
-          {/* {peers.map((peer) => (
-            <video key={peer.peerId} playsInline autoPlay={true} ref={(video) => peer.addStream(video.srcObject)} />
-          ))} */}
-          {callAccepted && !callEnded && (<video className='rounded-xl border border-red-400'
-            ref={peerVideo}
-            autoPlay
+          flex
+          justify-center
+          items-center
+          ${isFullScreen ? 'top-0 left-0' : 'top-0 right-0'}`}>
+          {isFullScreen ? (
+            // Your video frame in full screen
+            // Replace 'Your video frame code here' with your actual code
+            <div className={`w-full flex justify-center`}>
+              {stream && (<video
+                className='rounded-xl border w-full h-full border-red-200'
+                ref={myVideo}
+                muted
+                autoPlay
+                poster={image}
 
-          />)}
+              />)}
 
+            </div>
+          ) : (
+            // User's video frame in full screen
+            // Replace 'User video frame code here' with the actual code to render
+            // the user's video frame
+            <div className={`w-full flex justify-center`}>
+              {callAccepted && !callEnded && (<video className='rounded-xl border w-full h-full border-red-200'
+                ref={peerVideo}
+                autoPlay
+                poster={image}
+              />)}
+
+            </div>
+          )}
         </div>
-        <div className="absolute w-full  bottom-0 flex  items-center">
-          <div className="flex  items-center w-full">
-            <div className="flex flex-col  justify-end relative left-5    ">
+
+        {!isFullScreen && (
+          <div className={`w-1/4 absolute top-0 right-0 m-4 z-20`}>
+            {stream && (<video className='rounded-xl border  border-red-200'
+              ref={myVideo}
+
+              muted
+              autoPlay
+              poster={image}
+            />)}
+
+          </div>
+        )}
+
+        <div className="absolute  bottom-0 flex justify-center items-center">
+          <div className="flex justify-center items-center w-full">
+            <div className="flex flex-col  justify-end relative right-20    ">
               <input className={`absolute bottom-32 -right-9 ${show} -rotate-90`} type="range" orient="vertical" name='volume' min={0.0} max={1.0} step={0.01} value={volume.volume} onChange={handleVolume} />
               <button className='w-14 h-14   rounded-full  bg-stone-300  bg-opacity-60   cursor-pointer' onClick={handleOnClick}><i className="fa-sharp  fa-solid text-white fa-volume-high"></i></button>
             </div>
-            <div className="flex  w-full justify-center items-center ">
+            <div className="flex  justify-center items-center ">
               <button className='w-14 h-14 m-2 bg-opacity-70 bg-stone-300 rounded-full cursor-pointer' onClick={handleFullscreen}><i className="fa-solid text-white fa-maximize"></i></button>
-              <button className='w-14 h-14 m-2 bg-opacity-70 bg-stone-300 rounded-full cursor-pointer'>{true ? <i className="fa-solid text-white fa-microphone"></i> : <i className="fa-solid text-white fa-microphone-slash"></i>}</button>
-              <button className='w-20 h-20  m-2 rounded-full cursor-pointer' style={{ backgroundColor: `${bgColor}` }} onClick={handleCall}><i className="fa-solid fa-phone text-stone-200 fa-rotate-180"></i></button>
-              <button className='w-14 h-14 m-2 bg-opacity-70 bg-stone-300 rounded-full cursor-pointer' >{true ? <i className="fa-sharp fa-solid text-white fa-video"></i> : <i class="fa-solid text-white fa-video-slash"></i>}</button>
+              <button className='w-14 h-14 m-2 bg-opacity-70 bg-stone-300 rounded-full cursor-pointer' onClick={() => handleMicToggle()}>{micOn ? <i className="fa-solid text-white fa-microphone"></i> : <i className="fa-solid text-white fa-microphone-slash"></i>}</button>
+
+              {/* <button className='w-20 h-20  m-2 rounded-full cursor-pointer' style={{ backgroundColor: `${bgColor}` }} onClick={handleCall}><i className="fa-solid fa-phone text-stone-200 fa-rotate-180"></i></button> */}
+              {
+                (callAccepted && !callEnded) ? <button className='w-20 h-20  m-2 rounded-full cursor-pointer' style={{ backgroundColor: "#fc5d5b" }} onClick={() => {
+                  leaveCall();
+
+                  window.location.reload();
+                }}><i className="fa-solid fa-phone text-stone-200 fa-rotate-180"></i></button>
+
+                  : <button className='w-20 h-20  m-2 rounded-full cursor-pointer' onClick={call.isReceived && answerCall} style={{ backgroundColor: "#31a364" }} ><i className="fa-solid fa-phone text-stone-200 fa-rotate-180"></i></button>
+              }
+
+
+              <button className='w-14 h-14 m-2 bg-opacity-70 bg-stone-300 rounded-full cursor-pointer' onClick={() => handleCameraToggle()} >{cameraOn ? <i className="fa-sharp fa-solid text-white fa-video"></i> : <i class="fa-solid text-white fa-video-slash"></i>}</button>
               <button className='w-14 h-14 m-2 bg-opacity-70 bg-stone-300 cursor-pointer rounded-full' ><i className="fa-sharp fa-solid text-white fa-gear"></i></button>
             </div>
           </div>
@@ -143,17 +187,17 @@ const VideoContainer = () => {
         </div>
 
       </div>
-        <div className=" relative bottom-0 mt-4 flex items-center justify-center ">
-          <button onClick={handleCopy} className='mx-2 mycolor btnhover w-72 p-2 font-bold text-lg rounded-md'>
-            {copied ? 'Copied!' :"Click Here To Copy Your ID"}
-          </button>
-      
-            <input type="text" placeholder='Input User Id Here' className='border w-72 mycolor rounded-md mx-2 p-2' value={userId} onChange={(e)=>{setUserId(e.target.value);console.log(userId)}} />
-           <button className='mx-2 mycolor btnhover w-72 p-2 font-bold text-lg rounded-md' onClick={()=>callUser(userId)}>Make a Call</button>
-           
-        </div>
-     
-    </div>
+      <div className=" relative bottom-0 mt-4 flex flex-col items-center justify-center sm:flex-row ">
+        <button onClick={handleCopy} className='mx-2 bg-blue-400 text-white  w-60  hover:bg-blue-300 p-2 font-semibold text-lg rounded-md'>
+          {copied ? 'Copied!' : "Click Here To Copy Your ID"}
+        </button>
+
+        <input type="text" placeholder='Input User Id Here' className='border border-blue-400  bg-blue-200 w-60  rounded-md text-lg mx-2 p-2' value={userId} onChange={(e) => { setUserId(e.target.value) }} />
+        <button className='mx-2 w-60  bg-blue-400 text-white hover:bg-blue-300 p-2 font-semibold text-lg rounded-md' onClick={() => callUser(userId)}>Make a Call</button>
+
+      </div>
+
+    </div >
   )
 }
 

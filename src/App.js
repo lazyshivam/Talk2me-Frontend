@@ -4,6 +4,7 @@ import Container from './components/Container';
 import Login from './components/Login';
 import CreateUser from './components/CreateUser';
 import { useEffect, useState } from 'react';
+import Notification from './components/Notification';
 
 
 function App() {
@@ -18,7 +19,8 @@ function App() {
 
   return (
 
-    <div className='bg-slate-300 flex justify-center  ' style={{height:"100vh"}}>
+    <div className='bg-slate-300 flex m-auto  justify-center   ' style={{height:"100vh"}}>
+      <Notification/>
       {
       !token?<Routes>
         <Route exact path="/login" element={<Login/>} />
