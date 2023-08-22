@@ -32,7 +32,7 @@ const UserState = (props) => {
 
        GetUserDetails();
         // eslint-disable-next-line
-      },[]);
+      },[localStorage.getItem('token')]);
 
       //api call to get all logged in users in the database
       useEffect(()=>{

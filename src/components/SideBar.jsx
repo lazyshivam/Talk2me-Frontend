@@ -32,7 +32,7 @@ const SideBar = () => {
   const navigate=useNavigate();
   const handleLogout=() => {
     localStorage.removeItem('token');
-    navigate('/createUser');
+    navigate('/login');
     // alert("Loged out");
     window.location.reload();
   };
@@ -60,7 +60,7 @@ const SideBar = () => {
               <h2 className="text-lg font-semibold mb-2">{userProfile.name}</h2>
               <p className="text-gray-500">{userProfile.email}</p>
               <p>Joined by:{new Date(userProfile.date).toLocaleString()}</p>
-              <button onClick={handleLogout} className='bg-blue-400 text-white shadow-md p-2 px-4 mt-6 rounded-full hover:bg-blue-300 hover:font-semibold'>Logout</button>
+              <button onClick={handleLogout} className='bg-blue-500 text-white shadow-md p-2 px-4 mt-6 rounded-full hover:bg-blue-400 hover:font-semibold'>Logout</button>
             </div>
           )}
         </div>

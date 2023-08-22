@@ -24,8 +24,6 @@ const VideoContainer = () => {
     answerCall,
     callUser, isCallStarted, isFullScreen } = useContext(videoContext);
 
-  // const myVideo = useRef(null);
-  // const peerVideo = useRef(null);
 
   const handleFullscreen = () => {
     const videoElement = document.querySelector("video");
@@ -54,7 +52,6 @@ const VideoContainer = () => {
       audio.volume = volume;
     }
   };
-  //  window.location.reload();
 
 
   const [copied, setCopied] = useState(false);
@@ -118,9 +115,9 @@ const VideoContainer = () => {
           {isFullScreen ? (
             // Your video frame in full screen
             // Replace 'Your video frame code here' with your actual code
-            <div className={`w-full flex justify-center`}>
+            <div className={`w-full flex justify-center shadow-md shadow-blue-400`}>
               {stream && (<video
-                className='rounded-xl border w-full h-full border-red-200'
+                className='rounded-xl shadow-md shadow-blue-400 w-full h-full '
                 ref={myVideo}
                 muted
                 autoPlay
@@ -133,8 +130,8 @@ const VideoContainer = () => {
             // User's video frame in full screen
             // Replace 'User video frame code here' with the actual code to render
             // the user's video frame
-            <div className={`w-full flex justify-center`}>
-              {callAccepted && !callEnded && (<video className='rounded-xl border w-full h-full border-red-200'
+            <div className={`w-full flex justify-center `}>
+              {callAccepted && !callEnded && (<video className='rounded-xl shadow-md border  w-full h-full '
                 ref={peerVideo}
                 autoPlay
                 poster={image}
@@ -146,7 +143,7 @@ const VideoContainer = () => {
 
         {!isFullScreen && (
           <div className={`w-1/4 absolute top-0 right-0 m-4 z-20`}>
-            {stream && (<video className='rounded-xl border  border-red-200'
+            {stream && (<video className='rounded-xl shadow-sm border shadow-slate-200'
               ref={myVideo}
 
               muted
@@ -187,14 +184,16 @@ const VideoContainer = () => {
         </div>
 
       </div>
-      <div className=" relative bottom-0 mt-4 flex flex-col items-center justify-center sm:flex-row ">
-        <button onClick={handleCopy} className='mx-2 bg-blue-400 text-white  w-60  hover:bg-blue-300 p-2 font-semibold text-lg rounded-md'>
-          {copied ? 'Copied!' : "Click Here To Copy Your ID"}
-        </button>
+      <div className=" relative bottom-0 mt-4 ">
+        <div className="flex flex-wrap flex-row space-x-4 mb-2   items-center justify-center sm:flex-row">
 
-        <input type="text" placeholder='Input User Id Here' className='border border-blue-400  bg-blue-200 w-60  rounded-md text-lg mx-2 p-2' value={userId} onChange={(e) => { setUserId(e.target.value) }} />
-        <button className='mx-2 w-60  bg-blue-400 text-white hover:bg-blue-300 p-2 font-semibold text-lg rounded-md' onClick={() => callUser(userId)}>Make a Call</button>
+          <button onClick={handleCopy} className=' bg-blue-500 shadow-md shadow-slate-400 text-white  w-60  hover:bg-blue-400 p-2 font-semibold text-lg rounded-md'>
+            {copied ? 'Copied!' : "Click Here To Copy Your ID"}
+          </button>
 
+          <input type="text" placeholder='Input User Id Here' className='border-2 shadow-md shadow-slate-400 border-blue-400  bg-blue-200 w-60  rounded-md text-lg  p-2 focus:outline-none focus:border-blue-700' value={userId} onChange={(e) => { setUserId(e.target.value) }} />
+          <button className=' bg-blue-500 shadow-md shadow-slate-400 text-white  w-60  hover:bg-blue-400 p-2 font-semibold text-lg rounded-md' onClick={() => callUser(userId)}>Make a Call</button>
+        </div>
       </div>
 
     </div >

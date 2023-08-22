@@ -68,7 +68,7 @@ const Chat = () => {
                         <input type="text" value={cmessage} onChange={(e) => setCMessage(e.target.value)} className='px-5 rounded-l-2xl bg-transparent focus:outline-none text-lg' style={{ width: "-webkit-fill-available" }} placeholder='Write Your Message..' />
                         <button type='submit' className='m-2  px-3 py-2 rounded-xl bg-blue-500 hover:opacity-70' ><i className="fa-solid fa-paper-plane text-white"></i></button>
                     </div>
-
+             
                 </form>
             </div>
         </>
