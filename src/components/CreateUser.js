@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Profile_image from "../image/ShivamImagePS.jpg";
+import {url} from '../config.js'
+
+
 const CreateUser = () => {
   const nevigate = useNavigate();
 
@@ -15,8 +18,7 @@ const CreateUser = () => {
 
   const handleOnSubmit = async (event) => {
     event.preventDefault();
-    const host = "http://localhost:8080";
-    const response = await fetch(`${host}/api/auth/createuser`, {
+    const response = await fetch(`${url}/api/auth/createuser`, {
       method: "POST",
       headers: {
         Accept: "application/json",

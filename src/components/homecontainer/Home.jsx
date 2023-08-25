@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const Home = () => {
 
   return (
-    <div className="flex flex-col justify-center items-center h-full px-5 bg-blue-400">
+    <div className="flex flex-col justify-center  items-center h-full px-5 bg-blue-400">
       <h1 className="text-4xl font-bold mb-4 text-white">Welcome to VideoCall App</h1>
       <p className="text-lg  text-white mb-8">
         Connect with your friends, family, and colleagues through high-quality video calls.

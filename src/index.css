@@ -1,6 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.active{
+  @apply bg-blue-500 shadow-md hover:bg-blue-300 text-white  rounded;
+}
 @layer utilities {
   /* Chrome, Safari and open */
   .no-scrollbar::-webkit-scrollbar {
@@ -24,10 +27,7 @@
     color: #01a289;
     /* color:black; */
   }
-  .active-link {
-    @apply text-red-300;
-     
-  }
+  
   .overflow-wrap {
     overflow-wrap: anywhere;
   }
@@ -36,30 +36,17 @@
     color: #fd6d6a;
     /* color:black; */
   }
-  .mybg {
-    background-color: #01a289;
+  .mybg-green {
+    background-color: #31a364;
   }
-  .video-frame {
-    position: relative;
-    width: 100%;
-    height: 67vh;
-    /* padding-bottom:; */
-    /* 16:9 aspect ratio */
+  .mybg-red{
+    background-color: #fc5d5b;
   }
-
-  @keyframes gradientAnimation {
-    0% {
-      background-position: 0% 50%;
-    }
-    100% {
-      background-position: 100% 50%;
-    }
-  }
-
-  .bg-gradient-animation {
-    animation: gradientAnimation 100s linear infinite;
-    background: linear-gradient(45deg, #83e8f4, #1de4ac, #f6e693, #ffc700);
-    background-size: 300% 300%;
-  }
+  
+  /* .active-link {
+    background-color: #4dcece;
+    color: #039781;
+  } */
+  
  
 }

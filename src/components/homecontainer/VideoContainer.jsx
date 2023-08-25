@@ -103,7 +103,7 @@ const VideoContainer = () => {
         </div>
 
       </div>
-      <div className='video-frame flex justify-center  overflow-hidden border  rounded-lg'>
+      <div className='relative w-full h-full  flex justify-center  overflow-hidden border  rounded-lg'>
         <div className={`
           inset-0
           absolute
@@ -166,13 +166,13 @@ const VideoContainer = () => {
 
               {/* <button className='w-20 h-20  m-2 rounded-full cursor-pointer' style={{ backgroundColor: `${bgColor}` }} onClick={handleCall}><i className="fa-solid fa-phone text-stone-200 fa-rotate-180"></i></button> */}
               {
-                (callAccepted && !callEnded) ? <button className='w-20 h-20  m-2 rounded-full cursor-pointer' style={{ backgroundColor: "#fc5d5b" }} onClick={() => {
+                (callAccepted && !callEnded) ? <button className='w-20 h-20  m-2 rounded-full cursor-pointer mybg-red'  onClick={() => {
                   leaveCall();
 
                   window.location.reload();
                 }}><i className="fa-solid fa-phone text-stone-200 fa-rotate-180"></i></button>
 
-                  : <button className='w-20 h-20  m-2 rounded-full cursor-pointer' onClick={call.isReceived && answerCall} style={{ backgroundColor: "#31a364" }} ><i className="fa-solid fa-phone text-stone-200 fa-rotate-180"></i></button>
+                  : <button className='w-20 h-20  m-2 rounded-full cursor-pointer mybg-green' onClick={call.isReceived && answerCall}  ><i className="fa-solid fa-phone text-stone-200 fa-rotate-180"></i></button>
               }
 
 

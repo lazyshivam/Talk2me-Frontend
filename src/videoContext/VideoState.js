@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import io from "socket.io-client";
 import VideoContext from "./VideoContext";
+import { url } from "../config";
 import Peer from "simple-peer";
-const socket = io.connect("http://localhost:8080");
+const socket = io.connect(url);
 
 const VideoState = ({ children }) => {
   // const [peers, setPeers] = useState([]);
@@ -15,29 +16,11 @@ const VideoState = ({ children }) => {
   const [stream, setStream] = useState(null);
   const [peerStream, setPeerStream] = useState(null);
   const [isCallStarted, setIsCallStarted] = useState(false);
-  const [name,setName] = useState('');
+  const [name, setName] = useState("");
   const myVideo = useRef(null);
   const peerVideo = useRef(null);
-  const connectionRef=useRef(null);
+  const connectionRef = useRef(null);
 
-  // useEffect(() => {
-  //   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-  //         console.log("getUserMedia is not supported in this browser.");
-  //         return;
-  //       }
-  //   navigator.mediaDevices
-  //     .getUserMedia({ video: true, audio: true })
-  //     .then((stream) => {
-  //        setStream(stream);
-  //        if(myVideo.current)
-  //       myVideo.current.srcObject = stream;
-  //     })
-  //     .catch((error) => console.error(error));
-  //   socket.on("me", (id) => setMe(id));
-  //   socket.on("calluser", ({ from, name: callerName, signal }) => {
-  //     setCall({ isReceived: true, from, name: callerName, signal });
-  //   });
-  // }, []);
   useEffect(() => {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       console.log("getUserMedia is not supported in this browser.");
@@ -48,8 +31,7 @@ const VideoState = ({ children }) => {
       .getUserMedia({ video: true, audio: true })
       .then((stream) => {
         setStream(stream);
-        if(myVideo.current)
-        myVideo.current.srcObject = stream;
+        if (myVideo.current) myVideo.current.srcObject = stream;
       })
       .catch((error) => console.error(error));
 
@@ -59,6 +41,7 @@ const VideoState = ({ children }) => {
         stream.getTracks().forEach((track) => track.stop());
       }
     };
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -66,7 +49,8 @@ const VideoState = ({ children }) => {
     socket.on("calluser", ({ from, name: callerName, signal }) => {
       setCall({ isReceived: true, from, name: callerName, signal });
     });
-  }, [socket]);
+    // eslint-disable-next-line
+  }, []);
 
   const answerCall = () => {
     setCallAccepted(true);
@@ -77,7 +61,7 @@ const VideoState = ({ children }) => {
     });
     peer.on("stream", (stream) => {
       setPeerStream(stream);
-      peerVideo.current.srcObject=stream;
+      peerVideo.current.srcObject = stream;
     });
 
     peer.signal(call.signal);
@@ -96,8 +80,8 @@ const VideoState = ({ children }) => {
       });
     });
     peer.on("stream", (stream) => {
-       setPeerStream(stream);
-       peerVideo.current.srcObject=stream;
+      setPeerStream(stream);
+      peerVideo.current.srcObject = stream;
     });
 
     socket.on("callaccepted", (signal) => {
@@ -109,14 +93,14 @@ const VideoState = ({ children }) => {
     connectionRef.current = peer;
   };
 
-  const leaveCall=() => {
+  const leaveCall = () => {
     setCallEnded(true);
     setPeerStream(null);
     setStream(null);
     setIsCallStarted(false);
     setIsFullScreen(true);
     connectionRef.current.destroy();
-  }
+  };
 
   //for making the camera on and off.
   const [cameraOn, setCameraOn] = useState(true);
@@ -137,8 +121,6 @@ const VideoState = ({ children }) => {
     }
   };
 
-  
-
   return (
     <VideoContext.Provider
       value={{
@@ -149,8 +131,7 @@ const VideoState = ({ children }) => {
         stream,
         peerStream,
         peerVideo,
-        myVideo
-        ,
+        myVideo,
         name,
         setName,
         me,
@@ -161,7 +142,7 @@ const VideoState = ({ children }) => {
         leaveCall,
         answerCall,
         callUser,
-        isFullScreen
+        isFullScreen,
       }}
     >
       {children}

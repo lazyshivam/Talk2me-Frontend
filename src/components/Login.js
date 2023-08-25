@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Profile_image from "../image/ShivamImagePS.jpg";
+import {url} from '../config.js'
+
 const Login = () => {
-  const host = "http://localhost:8080";
+ 
   const navigate = useNavigate();
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const onChange = (e) => {
@@ -10,7 +12,7 @@ const Login = () => {
   };
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch(`${host}/api/auth/login`, {
+    const response = await fetch(`${url}/api/auth/login`, {
       method: "POST",
       headers: {
         Accept: "application/json",

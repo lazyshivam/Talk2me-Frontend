@@ -4,7 +4,7 @@ function Alert(props) {
   const { type, message } = props;
 
   const alertClasses = {
-    success: 'bg-green-100 text-green-900',
+    success: 'bg-green-400 text-green-900',
     warning: 'bg-yellow-100 text-yellow-900',
     error: 'bg-red-100 text-red-900',
   };
