@@ -3,57 +3,58 @@ import UserContext from "./UserContext";
 import { url } from "../config";
 
 const UserState = (props) => {
-  const [user, setUser] = useState({ name: "", email: "", date: "" });
+  const [userProfile, setUserProfile] = useState(null);
   const [alluser, setAllUser] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  //api call to get a particular user details from the database
   useEffect(() => {
-    async function GetUserDetails() {
-      const response = await fetch(`${url}/api/auth/getuser`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "auth-token": localStorage.getItem("token"),
-        },
-      });
-      const data = await response.json();
-
-      setUser({
-        name: data.name,
-        email: data.email,
-        date: data.date,
-      });
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsAuthenticated(true);
     }
+  }, []);
 
-    GetUserDetails();
-    // eslint-disable-next-line
-  }, [localStorage.getItem("token")]);
-
-  //api call to get all logged in users in the database
   useEffect(() => {
-    async function GetAllUsers() {
-      const response = await fetch(`${url}/api/auth/all`, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
+    if (isAuthenticated) {
+      const fetchData = async () => {
+        try {
+          const [userDataResponse, allUsersResponse] = await Promise.all([
+            fetch(`${url}/api/auth/getuser`, {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                "auth-token": localStorage.getItem("token"),
+              },
+            }),
+            fetch(`${url}/api/auth/all`, {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            }),
+          ]);
 
-      setAllUser(data);
+          const userData = await userDataResponse.json();
+          const allUsersData = await allUsersResponse.json();
+          // console.log("User Data:", userData);
+          // console.log("All Users Data:", allUsersData);
+          setUserProfile(userData);
+          setAllUser(allUsersData);
+        } catch (error) {
+          // Handle error
+          console.error("Error fetching data:", error);
+        }
+      };
+
+      fetchData();
     }
-    console.log(alluser);
-    GetAllUsers();
-    // eslint-disable-next-line
-  }, [user]);
-
-  // console.log(user)
+  }, [isAuthenticated]);
 
   return (
-    <UserContext.Provider value={{ user, alluser }}>
-      {props.children}
+    <UserContext.Provider value={{ userProfile, alluser, isAuthenticated }}>
+      {isAuthenticated &&userProfile && props.children}
     </UserContext.Provider>
   );
 };

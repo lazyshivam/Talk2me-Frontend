@@ -1,12 +1,13 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useContext } from 'react'
 import userImage from '../image/icons8-user-80.png';
 import Icon from '../image/talkmeIcon.webp';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { url } from '../config.js'
+// import { url } from '../config.js'
+import userContext from '../userContext/UserContext';
 
 
 const SideBar = () => {
-  const isActive = (route) => window.location.pathname === route;
+  
   const [isOpen, setIsOpen] = useState(false);
 
   const togglePopup = () => {
@@ -35,25 +36,8 @@ const SideBar = () => {
     };
   }, [isOpen]);
 
-
-  const [userProfile, setUserProfile] = useState({});
-  useEffect(() => {
-    const getUserData = async () => {
-      const response = await fetch(`${url}/api/auth/getuser`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          'auth-token': localStorage.getItem("token")
-        },
-
-      });
-      const user = await response.json();
-      setUserProfile(user);
-    }
-    getUserData();
-  }, [])
-
+  const {userProfile} = useContext(userContext);
+  
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -64,7 +48,7 @@ const SideBar = () => {
   return (
     <div className='flex max-md:hidden mr-4 py-5 ' >
       <div className="flex flex-col w-20 justify-between items-center">
-        <img src={Icon} className="w-20 h-14 rounded-full  cursor-pointer " alt="Icon" />
+        <img src={Icon} className="w-20 h-14 rounded-full " alt="Icon" />
         <div className="flex flex-col justify-around space-y-2">
           <NavLink to="/" className="cursor-pointer   p-3 m-2 text-zinc-400"><i className="fa-solid  fa-house"></i></NavLink>
           <NavLink to="/video" className='cursor-pointer    p-3 m-auto text-zinc-400'><i className="fa-solid fa-video"></i></NavLink>
@@ -76,7 +60,7 @@ const SideBar = () => {
         {/* <img src={userImage} className="w-10 h-12  rounded-full cursor-pointer hover:border hover: border-zinc-400" alt="userImage" /> */}
         <div className="relative">
           <button onClick={togglePopup} className=" text-white px-3 py-1 rounded-lg">
-            <img src={userImage} className="w-14 h-14 popup-button shadow-md  rounded-full cursor-pointer hover:scale-125 hover: border-zinc-400" alt="userImage" />
+            <img src={userImage} className="w-14 h-14 popup-button shadow-md shadow-blue-300 rounded-full cursor-pointer hover:scale-125 hover: border-zinc-400" alt="userImage" />
 
           </button>
           {isOpen && (

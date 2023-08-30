@@ -1,14 +1,15 @@
-import React, { useEffect, useState, useRef } from "react";
-import io from "socket.io-client";
+import React, { useEffect, useState, useRef, useContext } from "react";
+import {io} from "socket.io-client";
 import VideoContext from "./VideoContext";
 import { url } from "../config";
 import Peer from "simple-peer";
-const socket = io.connect(url);
+import userContext from "../userContext/UserContext";
 
 const VideoState = ({ children }) => {
+  const [socket,setSocket]=useState(null);
   // const [peers, setPeers] = useState([]);
   const [call, setCall] = useState({});
-
+  const {isAuthenticated,userProfile}=useContext(userContext);
   const [me, setMe] = useState(null);
   const [callAccepted, setCallAccepted] = useState(false);
   const [callEnded, setCallEnded] = useState(false);
@@ -20,6 +21,8 @@ const VideoState = ({ children }) => {
   const myVideo = useRef(null);
   const peerVideo = useRef(null);
   const connectionRef = useRef(null);
+
+ 
 
   useEffect(() => {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -45,13 +48,23 @@ const VideoState = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    socket.on("me", (id) => setMe(id));
-    socket.on("calluser", ({ from, name: callerName, signal }) => {
+
+    // if(userProfile)
+    const Newsocket = io(url);
+    setSocket(Newsocket);
+    Newsocket.emit("new-user-joined", { name: userProfile.name, email: userProfile.email });
+  
+    Newsocket.on("me", (id) => setMe(id));
+    Newsocket.on("calluser", ({ from, name: callerName, signal }) => {
       setCall({ isReceived: true, from, name: callerName, signal });
     });
+    console.log(me)
+    return () => Newsocket.disconnect();
     // eslint-disable-next-line
-  }, []);
+  }, [isAuthenticated]);
 
+
+  //answer call of the user
   const answerCall = () => {
     setCallAccepted(true);
     setIsFullScreen(false);
@@ -67,6 +80,8 @@ const VideoState = ({ children }) => {
     peer.signal(call.signal);
     connectionRef.current = peer;
   };
+
+  //call the user
   const callUser = (id) => {
     setIsCallStarted(true);
     const peer = new Peer({ initiator: true, trickle: false, stream });
@@ -92,7 +107,8 @@ const VideoState = ({ children }) => {
 
     connectionRef.current = peer;
   };
-
+ 
+  //cancel the call
   const leaveCall = () => {
     setCallEnded(true);
     setPeerStream(null);
@@ -139,13 +155,14 @@ const VideoState = ({ children }) => {
         callAccepted,
         callEnded,
         call,
+        socket,
         leaveCall,
         answerCall,
         callUser,
         isFullScreen,
       }}
     >
-      {children}
+      {isAuthenticated &&socket && children}
     </VideoContext.Provider>
   );
 };

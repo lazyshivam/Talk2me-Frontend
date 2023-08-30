@@ -5,7 +5,9 @@ import Login from "./components/Login";
 import CreateUser from "./components/CreateUser";
 import { useEffect, useState } from "react";
 import Notification from "./components/Notification";
-
+import UserState from "./userContext/UserState";
+import VideoState from "./videoContext/VideoState";
+import ChatState from "./chatContext/ChatState";
 
 function App() {
   const [token, setToken] = useState();
@@ -15,23 +17,27 @@ function App() {
     setToken(token);
     if (!token) navigate("/login");
     // eslint-disable-next-line
-  }, [localStorage.getItem("token")]);
+  }, []);
 
   return (
     <div
       className="bg-slate-300 flex m-auto  justify-center   "
       style={{ height: "100vh" }}
     >
-      <Notification />
       {!token ? (
-       
-          <Routes>
-            <Route exact path="/login" element={<Login />} />
-            <Route exact path="/createUser" element={<CreateUser />} />
-          </Routes>
-        
+        <Routes>
+          <Route exact path="/login" element={<Login />} />
+          <Route exact path="/createUser" element={<CreateUser />} />
+        </Routes>
       ) : (
-        <Container />
+        <UserState>
+          <VideoState>
+            <ChatState>
+              <Notification />
+              <Container />
+            </ChatState>
+          </VideoState>
+        </UserState>
       )}
     </div>
   );

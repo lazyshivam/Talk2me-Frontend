@@ -1,48 +1,46 @@
 import React, { useState, useEffect, useContext } from "react";
 import ChatContext from "./ChatContext";
-import { messages } from "../data/message";
 import userContext from "../userContext/UserContext";
-import {url} from '../config';
-const { io } = require("socket.io-client");
-
+import videoContext from "../videoContext/VideoContext";
 
 const ChatState = (props) => {
-  const [socket, setSocket] = useState(null);
   const [messageList, setMessageList] = useState([]);
-  const [participants, setParticipants] = useState([]);
-
-  //// eslint-disable-next-line
-
-  const { user } = useContext(userContext);
+  const { socket } = useContext(videoContext);
+  const { userProfile } = useContext(userContext);
+  const [participants,setParticipants] = useState([]);
 
   useEffect(() => {
-    const newSocket = io(url);
-    setSocket(newSocket);
-    newSocket.emit("new-user-joined", { name: user.name, email: user.email });
-    newSocket.on("user-joined", (data) => {
-      console.log(data);
-      for (const key in data) {
-        setParticipants((list) => [...list, data[key]]);
-      }
-
-      // }
-    });
-    newSocket.on("receive_message", (data) => {
+    // Define the event listener for receiving messages
+    const handleReceiveMessage = (data) => {
       setMessageList((list) => [...list, data]);
-    });
+    };
 
-    setMessageList(messages);
+    // Define the event listener for user joined
+    const handleUserJoined = (data) => {
+      
+      setMessageList((list) => [...list, data]);
+    };
 
-    return () => newSocket.disconnect();
-  }, [user]);
+    // Add the event listener for receiving messages
+    socket.on("receive_message", handleReceiveMessage);
 
-  // eslint-disable-next-line
+    // Add the event listener for user joined
+    socket.on("user_joined", handleUserJoined);
+
+    // Clean up event listeners when the component unmounts
+    return () => {
+      socket.off("receive_message", handleReceiveMessage);
+      socket.off("user_joined", handleUserJoined);
+    };
+  }, [socket]);
 
   const sendMessage = (messageData) => {
     socket.emit("send_message", messageData);
     setMessageList((list) => [...list, messageData]);
   };
-
+  
+  
+   
   return (
     <ChatContext.Provider value={{ sendMessage, messageList, participants }}>
       {props.children}
