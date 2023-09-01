@@ -21,16 +21,25 @@ const ChatState = (props) => {
       setMessageList((list) => [...list, data]);
     };
 
+     // Define the event listener for user left
+    const handleLeftJoined = (data) => {
+      
+      setMessageList((list) => [...list, data]);
+    };
+
     // Add the event listener for receiving messages
     socket.on("receive_message", handleReceiveMessage);
 
     // Add the event listener for user joined
     socket.on("user_joined", handleUserJoined);
+    socket.on("user_left", handleLeftJoined);
+
 
     // Clean up event listeners when the component unmounts
     return () => {
       socket.off("receive_message", handleReceiveMessage);
       socket.off("user_joined", handleUserJoined);
+      socket.off("user_left", handleLeftJoined);
     };
   }, [socket]);
 
