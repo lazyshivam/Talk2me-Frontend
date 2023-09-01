@@ -37,7 +37,7 @@ const CreateUser = () => {
     if (json.success) {
       localStorage.setItem("token", json.authtoken);
       nevigate("/");
-      // window.location.reload();
+      window.location.reload();
     } else {
       if (json.error) alert(json.error);
       else alert(json.errors[0].msg);
