@@ -15,9 +15,11 @@ const CreateUser = () => {
   const onChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
-
+  
+  const [isLoading,setIsLoading]=useState(false);
   const handleOnSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(!isLoading);
     const response = await fetch(`${url}/api/auth/createuser`, {
       method: "POST",
       headers: {
@@ -37,8 +39,10 @@ const CreateUser = () => {
     if (json.success) {
       localStorage.setItem("token", json.authtoken);
       nevigate("/");
+      setIsLoading(false);
       window.location.reload();
     } else {
+      setIsLoading(false);
       if (json.error) alert(json.error);
       else alert(json.errors[0].msg);
     }
@@ -156,12 +160,24 @@ const CreateUser = () => {
               </button>
             </div>
             <div className="flex justify-center items-center pt-10 ">
-              <button
+              {!isLoading?(<button
                 type="submit"
                 className="bg-blue-500 shadow-md hover:bg-blue-400 text-white w-96 p-2 font-bold text-lg rounded-md "
               >
                 Sign Up
+              </button>):(
+                <button
+                type="button"
+                className="hover:bg-blue-400 flex justify-center  shadow-md bg-blue-500 text-white w-96 p-2 font-bold text-lg rounded-md"
+                disabled
+              > 
+                <div className="animate-spin mr-3">
+
+                <i className="fas fa-spinner  fa-spin"></i> 
+                </div>
+                Please wait...
               </button>
+              )}
             </div>
           </form>
           <div className="flex justify-center p-3 relative top-12">

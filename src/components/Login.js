@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Profile_image from "../image/ShivamImagePS.jpg";
-import {url} from '../config.js'
+import { url } from "../config.js";
 
 const Login = () => {
- 
   const navigate = useNavigate();
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const onChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
+  const [isLogin, setIsLogin] = useState(false);
   const handleOnSubmit = async (e) => {
     e.preventDefault();
+    setIsLogin(!isLogin);
     const response = await fetch(`${url}/api/auth/login`, {
       method: "POST",
       headers: {
@@ -28,9 +29,11 @@ const Login = () => {
     if (json.success) {
       localStorage.setItem("token", json.authtoken);
       navigate("/");
+      setIsLogin(false);
       window.location.reload();
     } else {
       navigate("/login");
+      setIsLogin(false);
       alert("Invalid Credentials");
     }
   };
@@ -58,6 +61,7 @@ const Login = () => {
             problem-solving, and collaborative teamwork. Committed to delivering
             high-quality solutions and staying current with industry trends.
           </p>
+
           <div className="flex pt-5">
             <img
               src={Profile_image}
@@ -132,12 +136,26 @@ const Login = () => {
             </div>
 
             <div className="flex justify-center items-center pt-10 ">
-              <button
-                type="submit"
-                className="hover:bg-blue-400 shadow-md bg-blue-500 text-white w-96 p-2 font-bold text-lg rounded-md "
-              >
-                Log In
+              {!isLogin ? (
+                <button
+                  type="submit"
+                  className="hover:bg-blue-400 shadow-md bg-blue-500 text-white w-96 p-2 font-bold text-lg rounded-md "
+                >
+                  Log In
+                </button>
+              ) : (
+                <button
+                type="button"
+                className="hover:bg-blue-400 flex justify-center  shadow-md bg-blue-500 text-white w-96 p-2 font-bold text-lg rounded-md"
+                disabled
+              > 
+                <div className="animate-spin mr-3">
+
+                <i className="fas fa-spinner  fa-spin"></i> 
+                </div>
+                Please wait...
               </button>
+              )}
             </div>
           </form>
           <div className="flex justify-center p-3 relative top-32">
