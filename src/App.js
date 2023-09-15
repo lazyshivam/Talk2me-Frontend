@@ -10,14 +10,26 @@ import VideoState from "./videoContext/VideoState";
 import ChatState from "./chatContext/ChatState";
 
 function App() {
-  const [token, setToken] = useState();
+  // const [token, setToken] = useState();
+  // const navigate = useNavigate();
+  // useEffect(() => {
+  //   var token = localStorage.getItem("token");
+  //   setToken(token);
+  //   if (!token) navigate("/login");
+  //   // eslint-disable-next-line
+  // }, []);
+  const [token, setToken] = useState(localStorage.getItem("token"));
   const navigate = useNavigate();
+
   useEffect(() => {
-    var token = localStorage.getItem("token");
-    setToken(token);
-    if (!token) navigate("/login");
-    // eslint-disable-next-line
-  }, []);
+    if (!token) {
+      navigate("/login");
+    }
+  }, [token, navigate]);
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setToken(null); // Update the token state to trigger the navigation effect
+  };
 
   return (
     <div
@@ -34,7 +46,7 @@ function App() {
           <VideoState>
             <ChatState>
               <Notification />
-              <Container />
+              <Container onLogout={handleLogout} />
             </ChatState>
           </VideoState>
         </UserState>

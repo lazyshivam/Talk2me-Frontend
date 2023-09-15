@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useRef, useContext } from 'react'
 import userImage from '../image/icons8-user-80.png';
 import Icon from '../image/talkmeIcon.webp';
-import { NavLink, useNavigate } from 'react-router-dom';
-// import { url } from '../config.js'
+import { NavLink } from 'react-router-dom';
 import userContext from '../userContext/UserContext';
 
 
-const SideBar = () => {
+const SideBar = ({onLogout}) => {
   
   const [isOpen, setIsOpen] = useState(false);
 
@@ -37,13 +36,13 @@ const SideBar = () => {
   }, [isOpen]);
 
   const {userProfile} = useContext(userContext);
-  
-  const navigate = useNavigate();
+
   const handleLogout = () => {
     localStorage.removeItem('token');
-    navigate('/login');
-    // alert("Loged out");
-    window.location.reload();
+    // navigate('/login');
+    // // alert("Loged out");
+    onLogout();
+    // window.location.reload();
   };
   return (
     <div className='flex max-md:hidden mr-4 py-5 ' >

@@ -11,10 +11,10 @@ import TermsPrivacyPage from "./homecontainer/TermsPrivacyPage";
 import HelpSupportPage from "./homecontainer/HelpSupportPage";
 // import Notification from './Notification';
 
-const Container = () => {
+const Container = ({ onLogout }) => {
   return (
     <div className="flex bg-white  p-3 mx-20 my-2 w-full overflow-hidden  rounded-3xl">
-      <SideBar />
+      <SideBar onLogout={onLogout} />
       {/* <Notification/> */}
       <div className="border-l-2 p-2 w-3/5 max-md:w-full  min-h-screen rounded-t-2xl">
         <div className="flex justify-start items-center  p-3 shadow-md ">
