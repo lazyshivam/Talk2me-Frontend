@@ -25,7 +25,7 @@ function App() {
     if (!token) {
       navigate("/login");
     }
-  }, [token, navigate]);
+  }, [token]);
   const handleLogout = () => {
     localStorage.removeItem('token');
     setToken(null); // Update the token state to trigger the navigation effect

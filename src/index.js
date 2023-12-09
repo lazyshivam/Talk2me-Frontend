@@ -4,22 +4,16 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter as Router } from "react-router-dom";
-// import ChatState from "./chatContext/ChatState";
-// import UserState from "./userContext/UserState";
-// import VideoState from "./videoContext/VideoState";
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    {/* <UserState>
-      <VideoState>
-      <ChatState> */}
+    
         <Router>
           <App />
         </Router>
-      {/* </ChatState>
-      </VideoState>
-    </UserState> */}
+     
   </React.StrictMode>
 );
 
