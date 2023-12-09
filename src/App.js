@@ -10,14 +10,7 @@ import VideoState from "./videoContext/VideoState";
 import ChatState from "./chatContext/ChatState";
 
 function App() {
-  // const [token, setToken] = useState();
-  // const navigate = useNavigate();
-  // useEffect(() => {
-  //   var token = localStorage.getItem("token");
-  //   setToken(token);
-  //   if (!token) navigate("/login");
-  //   // eslint-disable-next-line
-  // }, []);
+
   const [token, setToken] = useState(localStorage.getItem("token"));
   const navigate = useNavigate();
 
